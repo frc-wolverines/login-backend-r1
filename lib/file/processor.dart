@@ -31,6 +31,7 @@ class FileProcessor {
     rosterFile.writeAsStringSync(jsonify(roster.list()));
   }
 
+  ///Removes member from roster and deletes their file
   static void removeMember(String name) {
     if(!rosterFile.readAsStringSync().contains(name)) return;
   
