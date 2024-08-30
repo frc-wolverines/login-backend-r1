@@ -41,7 +41,7 @@ class Log {
   void logout(SimpleMember member) {
     for(final i in entries) {
       if(i.id == member.id) {
-        entries.remove(i);
+        i.logout();
       }
     }
   }
@@ -49,6 +49,9 @@ class Log {
   void close() {
     closed = Time.now();
     total = Time.difference(closed, opened);
+    for(final i in entries) {
+      i.logout();
+    }
   }
 
   Map<String, dynamic> map() {
