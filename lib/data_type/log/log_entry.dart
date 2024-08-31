@@ -1,5 +1,4 @@
 import 'package:login_v2/data_type/log/log_entry_simple.dart';
-import 'package:login_v2/data_type/member/member.dart';
 import 'package:login_v2/data_type/member/member_simple.dart';
 import 'package:login_v2/data_type/time.dart';
 
