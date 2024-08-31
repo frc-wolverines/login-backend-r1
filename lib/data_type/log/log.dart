@@ -54,6 +54,15 @@ class Log {
     }
   }
 
+  bool has(SimpleMember member) {
+    for(final i in entries) {
+      if (i.id == member.id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   Map<String, dynamic> map() {
     List<Map<String, dynamic>> maps = List.empty(growable: true);
     for(final i in entries) {
