@@ -5,7 +5,7 @@ class MemberHistory {
 
   List<MemberHistoryEntry> entries;
 
-  factory MemberHistory.from(List<Map<String, dynamic>> list) {
+  factory MemberHistory.from(List<dynamic> list) {
     List<MemberHistoryEntry> entries = List.empty(growable: true);
     for(final i in list) {
       entries.add(MemberHistoryEntry.from(i));

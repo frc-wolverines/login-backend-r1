@@ -6,7 +6,7 @@ class Roster {
 
   List<SimpleMember> members;
 
-  factory Roster.from(List<Map<String, dynamic>> maps) {
+  factory Roster.from(List<dynamic> maps) {
     List<SimpleMember> members = List.empty(growable: true);
     for(final i in maps) {
       members.add(SimpleMember.from(i));
