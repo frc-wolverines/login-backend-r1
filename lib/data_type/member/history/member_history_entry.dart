@@ -35,7 +35,7 @@ class MemberHistoryEntry {
   }
 
   factory MemberHistoryEntry.log(LogEntry log) {
-    final type = MemberHistoryEntryType.creation;
+    final type = MemberHistoryEntryType.log;
     final DateTime date = DateTime.now();
     final description = "Log data";
     final SimpleLogEntry entry = log.simplify();
