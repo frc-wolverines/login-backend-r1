@@ -26,14 +26,19 @@ class MemberProcessor {
     if(!rosterFile.existsSync()) return Roster.empty();
     return Roster.from(jsonDecode(rosterFile.readAsStringSync()));
   }
-  
+
+  ///Returns if the a stored Roster exists
+  static bool rosterExists() {
+    return rosterFile.existsSync();
+  }
+
   ///Creates a new member file and adds them to the roster.
   ///<br/>If it does exists, does nothing
   static void newMember(String name) {
     if(rosterFile.readAsStringSync().contains(name)) return;
     dynamic cachedRoster = jsonDecode(rosterFile.readAsStringSync());
     Roster roster = Roster(members: List<dynamic>.from(cachedRoster)
-      .map((i) =>SimpleMember.from(i))
+      .map((i) => SimpleMember.from(i))
       .toList()
     );
 
@@ -53,7 +58,7 @@ class MemberProcessor {
   
     dynamic cachedRoster = jsonDecode(rosterFile.readAsStringSync());
     Roster roster = Roster(members: List<dynamic>.from(cachedRoster)
-      .map((i) =>SimpleMember.from(i))
+      .map((i) => SimpleMember.from(i))
       .toList()
     );
 
@@ -70,15 +75,57 @@ class MemberProcessor {
   }
 
   ///Returns the removal status of a member given their id
-  ///<br/>Works by detecting if that id has a "r" prefix to it's file name
   static bool hasBeenRemoved(int id) {
-    return File("${memberDirectory.path}/r$id.json").existsSync();
+    return getRoster().findById(id).removed;
   }
 
+  ///Returns the SimpleMember object representing the Member identified with a given id
+  ///<br>Returns empty SimpleMember if a Member with this id is not in the stored Roster
+  ///<br>A member in the roster can not be identified with the given id
+  static SimpleMember getSimpleMemberById(int id) {
+    if(!getRoster().containsMemberWithId(id)) return Member.empty().simplify();
+    return getRoster().findById(id);
+  }
+
+  ///Returns a random integer that is currently not used as an ID for any current or removed Member
   static int assignId() {
     int num = Random().nextInt(1000000);
-    if(!File("${memberDirectory.path}/$num.json").existsSync() || !File("${memberDirectory.path}/r$num.json").existsSync()) return num;
+    if(!getRoster().containsMemberWithId(num)) return num;
     return assignId();
+  }
+
+  ///Deletes the Member file corresponding to the given id, regardless of removed status
+  ///<br>Deletes the Member corresponding to the given id from the stored Roster
+  static void purge(int id) {
+    dynamic cachedRoster = jsonDecode(rosterFile.readAsStringSync());
+    Roster roster = Roster(members: List<dynamic>.from(cachedRoster)
+      .map((i) => SimpleMember.from(i))
+      .toList()
+    );
+
+    SimpleMember member = roster.findById(id);
+    roster.members.remove(member);
+    rosterFile.writeAsStringSync(jsonify(roster.list()));
+
+    if(!getRoster().findById(id).removed) File("${memberDirectory.path}/r$id.json").deleteSync();
+    if(getRoster().findById(id).removed) File("${memberDirectory.path}/$id.json").deleteSync();
+  }
+
+  ///Deletes all stored Member files including removed Members
+  ///<br>Clears the Roster
+  static void purgeAll() {
+    dynamic cachedRoster = jsonDecode(rosterFile.readAsStringSync());
+    Roster roster = Roster(members: List<dynamic>.from(cachedRoster)
+      .map((i) => SimpleMember.from(i))
+      .toList()
+    );
+
+    roster.members.clear();
+    rosterFile.writeAsStringSync(jsonify(roster.list()));
+
+    for(final i in memberDirectory.listSync()) {
+      i.deleteSync();
+    }
   }
 }
 
