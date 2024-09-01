@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:login_v2/data_type/member/history/member_history.dart';
 import 'package:login_v2/data_type/member/history/member_history_entry.dart';
 import 'package:login_v2/data_type/member/member_simple.dart';
-import 'package:login_v2/data_type/roster/roster.dart';
 
 class Member {
   Member({required this.name, required this.id, required this.history});
