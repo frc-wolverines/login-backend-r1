@@ -19,11 +19,11 @@ class Roster {
   }
 
   void removeByName(String name) {
-    members.remove(findByName(name));
+    members[members.indexOf(findByName(name))].remove();
   }
 
   void removeById(int id) {
-    members.remove(findById(id));
+    members[members.indexOf(findById(id))].remove();
   }
 
   void add(SimpleMember member) {
