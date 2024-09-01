@@ -3,6 +3,7 @@ class SimpleMember {
 
   final String name;
   final int id;
+  bool removed = false;
 
   factory SimpleMember.from(Map<String, dynamic> map) {
     final name = map['name'];
@@ -10,10 +11,15 @@ class SimpleMember {
     return SimpleMember(name: name, id: id);
   }
 
+  void remove() {
+    removed = true;
+  }
+
   Map<String, dynamic> map() {
     return {
       'name': name,
-      'id': id
+      'id': id,
+      'removed': removed
     };
   }
 }
